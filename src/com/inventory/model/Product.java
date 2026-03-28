@@ -1,6 +1,6 @@
 package com.inventory.model;
 
-public class Item {
+public class Product {
   private int productID;
   private String name;
   private String sku;
@@ -8,13 +8,13 @@ public class Item {
   private int quantity;
   private String description;
 
-  public Item (int pid, String itemname, String itemsku, double itemprice, int itemquantity, String itemdescription) {
+  public Product (int pid, String prodname, String prodsku, double prodprice, int prodquantity, String proddescription) {
     productID = pid;
-    name = itemname;
-    sku = itemsku;
-    price = itemprice;
-    quantity = itemquantity;
-    description = itemdescription;
+    name = prodname;
+    sku = prodsku;
+    price = prodprice;
+    quantity = prodquantity;
+    description = proddescription;
   }
 
   public int getProductID() {
@@ -59,6 +59,10 @@ public class Item {
 
   @Override
   public String toString() {
-    return "Item Details:\n ID: "+productID+" Name: "+name+" SKU: "+sku+" Price: "+price+" Quantity: "+quantity+" Description: "+description ;
+    return productID+","+name+","+sku+","+price+","+quantity+","+description ;
+  }
+
+  public void display() {
+    System.out.println("Product ID: "+productID+" Name: "+name+" SKU: "+sku+" Price: "+price+" Quantity: "+quantity+" Description: "+description);
   }
 }
