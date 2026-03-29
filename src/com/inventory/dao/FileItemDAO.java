@@ -17,6 +17,10 @@ public class FileItemDAO implements ProductDAO {
   }
 
   private Product csvToProduct(String line) {
+    if (line == null || line.trim().isEmpty()) {
+        return null;
+    }
+
     try {
       String[] fields = line.split(COMMA_DELIMITER);
       int pid = Integer.parseInt(fields[0]);
@@ -25,7 +29,8 @@ public class FileItemDAO implements ProductDAO {
       double price = Double.parseDouble(fields[3]);
       int quantity = Integer.parseInt(fields[4]);
       String description = fields[5];
-      Product p = new Product(pid, name, sku, price, quantity, description);
+      Product p = new Product(name, sku, price, quantity, description);
+      p.setProductID(pid);
       return p; } catch (NumberFormatException e) {
       e.printStackTrace();
     }
@@ -35,15 +40,17 @@ public class FileItemDAO implements ProductDAO {
 
   public void save(Product p) {
     try (BufferedWriter writer = new BufferedWriter(new FileWriter("data/inventory.csv", true))) {
-      writer.newLine();
       writer.write(productToCSV(p));
+      writer.newLine();
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   public Product findBySKU(String sku) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data/inventory.csv"))) {
+    File file = new File("data/inventory.csv");
+    if (!file.exists()) return null;
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
       String line;
       while ((line = reader.readLine()) != null) {
         Product p = csvToProduct(line);
@@ -58,8 +65,12 @@ public class FileItemDAO implements ProductDAO {
   }
 
   public List<Product> findAll() {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data/inventory.csv"))) {
-      List<Product> prodlist = new ArrayList<Product>();
+    File file = new File("data/inventory.csv");
+    if (!file.exists()) {
+        return new ArrayList<>();
+    }
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+      List<Product> prodlist = new ArrayList<>();
       String line;
       while ((line = reader.readLine()) != null) {
         Product p = csvToProduct(line);
@@ -74,7 +85,9 @@ public class FileItemDAO implements ProductDAO {
   }
 
   public void deleteBySKU(String sku) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data/inventory.csv"));
+    File file = new File("data/inventory.csv");
+    if (!file.exists()) return;
+    try (BufferedReader reader = new BufferedReader(new FileReader(file));
         BufferedWriter writer = new BufferedWriter(new FileWriter("data/temp.csv"))) {
       String line;
       int check = 0;
@@ -82,8 +95,8 @@ public class FileItemDAO implements ProductDAO {
         Product p = csvToProduct(line);
         if (p != null && !p.getSKU().equals(sku)) {
           check = 1;
-          writer.newLine();
           writer.write(line);
+          writer.newLine();
         }
       }
       if (check == 0) {
@@ -100,19 +113,21 @@ public class FileItemDAO implements ProductDAO {
   }
 
   public void updateStock(String sku, int quantity) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data/inventory.csv"));
+    File file = new File("data/inventory.csv");
+    if (!file.exists()) return;
+    try (BufferedReader reader = new BufferedReader(new FileReader(file));
         BufferedWriter writer = new BufferedWriter(new FileWriter("data/temp.csv"))) {
       String line;
       while ((line=reader.readLine()) != null) {
         Product prod = csvToProduct(line);
         if (prod!=null && prod.getSKU().equals(sku)) {
           prod.setQuantity(prod.getQuantity()+quantity);
-          writer.newLine();
           writer.write(productToCSV(prod));
+          writer.newLine();
         }
         else {
-          writer.newLine();
           writer.write(line);
+          writer.newLine();
         }
       }
       
@@ -124,18 +139,20 @@ public class FileItemDAO implements ProductDAO {
   }
 
   public void update(Product p) {
-    try (BufferedReader reader = new BufferedReader(new FileReader("data/inventory.csv"));
+    File file = new File("data/inventory.csv");
+    if (!file.exists()) return;
+    try (BufferedReader reader = new BufferedReader(new FileReader(file));
         BufferedWriter writer = new BufferedWriter(new FileWriter("data/temp.csv"))) {
       String line;
       while ((line=reader.readLine()) != null) {
         Product prod = csvToProduct(line);
         if (prod!=null && prod.getSKU().equals(p.getSKU())) {
-          writer.newLine();
           writer.write(productToCSV(p));
+          writer.newLine();
         }
         else {
-          writer.newLine();
           writer.write(line);
+          writer.newLine();
         }
       }
       
@@ -146,5 +163,15 @@ public class FileItemDAO implements ProductDAO {
     }
   }
   
+  public int getNextProductID() {
+    List<Product> all = findAll();
+    int maxID = 0;
+    for (Product p : all) {
+        if (p.getProductID() > maxID) {
+            maxID = p.getProductID();
+        }
+    }
+    return maxID + 1;
+  }
 
 }

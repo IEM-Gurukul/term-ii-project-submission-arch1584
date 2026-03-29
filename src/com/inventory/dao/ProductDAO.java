@@ -10,4 +10,5 @@ public interface ProductDAO {
   void deleteBySKU(String sku);
   void updateStock(String sku, int quantity);
   public void update(Product p);
+  int getNextProductID();
 }

@@ -12,14 +12,12 @@ public class InventoryService {
     this.dao = dao;
   }
 
-  public boolean addProduct(Product p) {
-    if (p != null) {
-      dao.save(p);
-      return true;
-    }
-    else {
-      return false;
-    }
+  public boolean addProduct(String name, String sku, double price, int quantity, String description) {
+    int newID = dao.getNextProductID();
+    Product p = new Product(name, sku, price, quantity, description);
+    p.setProductID(newID);
+    dao.save(p);
+    return true;
   }
 
   public boolean deleteProduct(String sku) {

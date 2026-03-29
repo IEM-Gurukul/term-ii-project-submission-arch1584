@@ -8,8 +8,7 @@ public class Product {
   private int quantity;
   private String description;
 
-  public Product (int pid, String prodname, String prodsku, double prodprice, int prodquantity, String proddescription) {
-    productID = pid;
+  public Product (String prodname, String prodsku, double prodprice, int prodquantity, String proddescription) {
     name = prodname;
     sku = prodsku;
     price = prodprice;
@@ -57,9 +56,18 @@ public class Product {
     this.description = newdescription;
   }
 
+  public void setProductID(int id) {
+    this.productID = id;
+  }
+
   @Override
   public String toString() {
     return productID+","+name+","+sku+","+price+","+quantity+","+description ;
   }
+
+  public String display() {
+    return "Product details:\n Product ID: "+productID+"  Name: "+name+"  SKU: "+sku+"  Price: "+price+"  Quantity: "+quantity+"  Description: "+description ;
+  }
+
 
 }
