@@ -2,6 +2,7 @@ package com.inventory.dao;
 
 import java.util.*;
 import java.io.*;
+import java.nio.file.*;
 
 import com.inventory.model.Product;
 
@@ -105,8 +106,11 @@ public class FileItemDAO implements ProductDAO {
       else {
         System.out.println("Product deleted successfully!");
       }
-      new File("data/inventory.csv").delete();
-      new File("data/temp.csv").renameTo(new File("data/inventory.csv"));
+      Files.move(
+          Paths.get("data/temp.csv"),
+          Paths.get("data/inventory.csv"),
+          StandardCopyOption.REPLACE_EXISTING
+      );
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -131,8 +135,11 @@ public class FileItemDAO implements ProductDAO {
         }
       }
       
-      new File("data/inventory.csv").delete();
-      new File("data/temp.csv").renameTo(new File("data/inventory.csv"));
+      Files.move(
+          Paths.get("data/temp.csv"),
+          Paths.get("data/inventory.csv"),
+          StandardCopyOption.REPLACE_EXISTING
+      );
     } catch (IOException e) {
       e.printStackTrace();
     }
@@ -156,8 +163,11 @@ public class FileItemDAO implements ProductDAO {
         }
       }
       
-      new File("data/inventory.csv").delete();
-      new File("data/temp.csv").renameTo(new File("data/inventory.csv"));
+      Files.move(
+          Paths.get("data/temp.csv"),
+          Paths.get("data/inventory.csv"),
+          StandardCopyOption.REPLACE_EXISTING
+      );
     } catch (IOException e) {
       e.printStackTrace();
     }

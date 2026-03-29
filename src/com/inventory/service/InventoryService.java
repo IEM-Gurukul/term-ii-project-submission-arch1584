@@ -2,6 +2,7 @@ package com.inventory.service;
 import java.util.*;
 import com.inventory.model.Product;
 import com.inventory.dao.ProductDAO;
+import com.inventory.exception.DuplicateSKUException;
 import com.inventory.exception.InsufficientStockException;
 import com.inventory.exception.ItemNotFoundException;
 
@@ -13,6 +14,11 @@ public class InventoryService {
   }
 
   public boolean addProduct(String name, String sku, double price, int quantity, String description) {
+    
+    if (dao.findBySKU(sku) != null) {
+        throw new DuplicateSKUException("SKU already exists: " + sku);
+    }
+    
     int newID = dao.getNextProductID();
     Product p = new Product(name, sku, price, quantity, description);
     p.setProductID(newID);
