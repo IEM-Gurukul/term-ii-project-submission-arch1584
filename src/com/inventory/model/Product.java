@@ -62,7 +62,4 @@ public class Product {
     return productID+","+name+","+sku+","+price+","+quantity+","+description ;
   }
 
-  public void display() {
-    System.out.println("Product ID: "+productID+" Name: "+name+" SKU: "+sku+" Price: "+price+" Quantity: "+quantity+" Description: "+description);
-  }
 }

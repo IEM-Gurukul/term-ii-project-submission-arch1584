@@ -1,3 +1,5 @@
+package com.inventory.dao;
+
 import java.util.List;
 import com.inventory.model.Product;
 
@@ -6,5 +8,6 @@ public interface ProductDAO {
   Product findBySKU(String sku);
   List<Product> findAll();
   void deleteBySKU(String sku);
-  void update(Product p);
+  void updateStock(String sku, int quantity);
+  public void update(Product p);
 }

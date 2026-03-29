@@ -77,9 +77,40 @@ public class FileItemDAO implements ProductDAO {
     try (BufferedReader reader = new BufferedReader(new FileReader("data/inventory.csv"));
         BufferedWriter writer = new BufferedWriter(new FileWriter("data/temp.csv"))) {
       String line;
+      int check = 0;
       while ((line=reader.readLine()) != null) {
         Product p = csvToProduct(line);
         if (p != null && !p.getSKU().equals(sku)) {
+          check = 1;
+          writer.newLine();
+          writer.write(line);
+        }
+      }
+      if (check == 0) {
+        System.out.println("Product Not Found. No changes made.");
+      }
+      else {
+        System.out.println("Product deleted successfully!");
+      }
+      new File("data/inventory.csv").delete();
+      new File("data/temp.csv").renameTo(new File("data/inventory.csv"));
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public void updateStock(String sku, int quantity) {
+    try (BufferedReader reader = new BufferedReader(new FileReader("data/inventory.csv"));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("data/temp.csv"))) {
+      String line;
+      while ((line=reader.readLine()) != null) {
+        Product prod = csvToProduct(line);
+        if (prod!=null && prod.getSKU().equals(sku)) {
+          prod.setQuantity(prod.getQuantity()+quantity);
+          writer.newLine();
+          writer.write(productToCSV(prod));
+        }
+        else {
           writer.newLine();
           writer.write(line);
         }
