@@ -22,7 +22,7 @@ public class InventoryService {
     }
   }
 
-  public boolean deleteProduct(String sku) throws ItemNotFoundException {
+  public boolean deleteProduct(String sku) {
     Product product = dao.findBySKU(sku);
     if (product == null) {
       throw new ItemNotFoundException("Product not found: " + sku);
@@ -36,7 +36,7 @@ public class InventoryService {
     }
   }
 
-  public boolean reduceStock(String sku, int quantity) throws InsufficientStockException, ItemNotFoundException {
+  public boolean reduceStock(String sku, int quantity) {
     Product product = dao.findBySKU(sku);
     if (product!= null) {
       if (product.getQuantity()>=quantity) {
@@ -59,7 +59,7 @@ public class InventoryService {
     }
   }
 
-  public boolean restockProduct(String sku, int quantity) throws ItemNotFoundException {
+  public boolean restockProduct(String sku, int quantity) {
     Product product = dao.findBySKU(sku);
     if (product != null) {   
       if (quantity<0) 
@@ -78,7 +78,7 @@ public class InventoryService {
   }
 
 
-  public boolean updateProduct(String sku, double price, String description) throws ItemNotFoundException {
+  public boolean updateProduct(String sku, double price, String description) {
     Product product = dao.findBySKU(sku);
     if (product == null) {
       throw new ItemNotFoundException("Product not found: " + sku);
