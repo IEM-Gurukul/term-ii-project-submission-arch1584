@@ -66,7 +66,7 @@ public class Product {
   }
 
   public void display() {
-    System.out.println("Product details:\n Product ID: "+productID+"  Name: "+name+"  SKU: "+sku+"  Price: "+price+"  Quantity: "+quantity+"  Description: "+description);
+    System.out.println("Product ID: "+productID+"  Name: "+name+"  SKU: "+sku+"  Price: "+price+"  Quantity: "+quantity+"  Description: "+description);
   }
 
 
