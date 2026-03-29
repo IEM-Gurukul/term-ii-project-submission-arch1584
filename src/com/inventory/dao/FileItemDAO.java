@@ -88,88 +88,97 @@ public class FileItemDAO implements ProductDAO {
   public void deleteBySKU(String sku) {
     File file = new File("data/inventory.csv");
     if (!file.exists()) return;
+
     try (BufferedReader reader = new BufferedReader(new FileReader(file));
         BufferedWriter writer = new BufferedWriter(new FileWriter("data/temp.csv"))) {
-      String line;
-      int check = 0;
-      while ((line=reader.readLine()) != null) {
-        Product p = csvToProduct(line);
-        if (p != null && !p.getSKU().equals(sku)) {
-          check = 1;
-          writer.write(line);
-          writer.newLine();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Product p = csvToProduct(line);
+            if (p != null && !p.getSKU().equals(sku)) {
+                writer.write(line);
+                writer.newLine();
+            }
         }
-      }
-      if (check == 0) {
-        System.out.println("Product Not Found. No changes made.");
-      }
-      else {
-        System.out.println("Product deleted successfully!");
-      }
-      Files.move(
-          Paths.get("data/temp.csv"),
-          Paths.get("data/inventory.csv"),
-          StandardCopyOption.REPLACE_EXISTING
-      );
     } catch (IOException e) {
-      e.printStackTrace();
+        e.printStackTrace();
+        return;
+    }
+
+    try {
+        Files.move(
+            Paths.get("data/temp.csv"),
+            Paths.get("data/inventory.csv"),
+            StandardCopyOption.REPLACE_EXISTING
+        );
+    } catch (IOException e) {
+        e.printStackTrace();
     }
   }
 
   public void updateStock(String sku, int quantity) {
     File file = new File("data/inventory.csv");
     if (!file.exists()) return;
+
     try (BufferedReader reader = new BufferedReader(new FileReader(file));
         BufferedWriter writer = new BufferedWriter(new FileWriter("data/temp.csv"))) {
-      String line;
-      while ((line=reader.readLine()) != null) {
-        Product prod = csvToProduct(line);
-        if (prod!=null && prod.getSKU().equals(sku)) {
-          prod.setQuantity(prod.getQuantity()+quantity);
-          writer.write(productToCSV(prod));
-          writer.newLine();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Product prod = csvToProduct(line);
+            if (prod != null && prod.getSKU().equals(sku)) {
+                prod.setQuantity(prod.getQuantity() + quantity);
+                writer.write(productToCSV(prod));
+                writer.newLine();
+            } else {
+                writer.write(line);
+                writer.newLine();
+            }
         }
-        else {
-          writer.write(line);
-          writer.newLine();
-        }
-      }
-      
-      Files.move(
-          Paths.get("data/temp.csv"),
-          Paths.get("data/inventory.csv"),
-          StandardCopyOption.REPLACE_EXISTING
-      );
     } catch (IOException e) {
-      e.printStackTrace();
+        e.printStackTrace();
+        return; 
+    }
+
+    try {
+        Files.move(
+            Paths.get("data/temp.csv"),
+            Paths.get("data/inventory.csv"),
+            StandardCopyOption.REPLACE_EXISTING
+        );
+    } catch (IOException e) {
+        e.printStackTrace();
     }
   }
 
   public void update(Product p) {
     File file = new File("data/inventory.csv");
     if (!file.exists()) return;
+
     try (BufferedReader reader = new BufferedReader(new FileReader(file));
         BufferedWriter writer = new BufferedWriter(new FileWriter("data/temp.csv"))) {
-      String line;
-      while ((line=reader.readLine()) != null) {
-        Product prod = csvToProduct(line);
-        if (prod!=null && prod.getSKU().equals(p.getSKU())) {
-          writer.write(productToCSV(p));
-          writer.newLine();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            Product prod = csvToProduct(line);
+            if (prod != null && prod.getSKU().equals(p.getSKU())) {
+                writer.write(productToCSV(p));
+                writer.newLine();
+            } else {
+                writer.write(line);
+                writer.newLine();
+            }
         }
-        else {
-          writer.write(line);
-          writer.newLine();
-        }
-      }
-      
-      Files.move(
-          Paths.get("data/temp.csv"),
-          Paths.get("data/inventory.csv"),
-          StandardCopyOption.REPLACE_EXISTING
-      );
     } catch (IOException e) {
-      e.printStackTrace();
+        e.printStackTrace();
+        return;
+    }
+
+    try {
+        Files.move(
+            Paths.get("data/temp.csv"),
+            Paths.get("data/inventory.csv"),
+            StandardCopyOption.REPLACE_EXISTING
+        );
+    } catch (IOException e) {
+        e.printStackTrace();
     }
   }
   
