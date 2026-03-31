@@ -2,23 +2,16 @@
 # PCCCS495 – Term II Project
 
 ## Project Title
-Inventory Management System
+Inventory Management System using DAO Pattern + File persistence
 
 ---
 
 ## Problem Statement
-Small and medium-scale warehouses often rely on manual methods to track 
-product stock, leading to errors in stock levels, pricing, and product 
-records. This project addresses that problem by providing a console-based 
-Inventory Management System built entirely in Java. The system allows 
-warehouse staff to add new products with auto-generated IDs, update pricing 
-and descriptions, track and adjust stock levels through restock and reduction 
-operations, and delete discontinued products. All data is persisted to a CSV 
-file so inventory state is retained across sessions. The system is designed 
-using the DAO (Data Access Object) pattern, ensuring a clean separation 
-between business logic, data access, and the user interface. It demonstrates 
-core Object-Oriented Programming principles including abstraction, 
-encapsulation, inheritance, polymorphism, and exception handling.
+This project presents a console-based Inventory Management System developed entirely in Java, with the primary objective of demonstrating the practical application of Object-Oriented Programming principles within a structured, multi-layered architecture.
+
+The system is built around the Data Access Object (DAO) design pattern, which enforces a deliberate separation between the user interface, business logic, and data persistence layers. Each layer communicates only with the layer directly below it, ensuring that no component carries responsibilities beyond its defined role. This separation is the central design goal of the project.
+
+The application supports core inventory operations including adding products with auto-generated identifiers, updating product details, adjusting stock levels through restock and reduction operations, and removing products from the system. All data is persisted to a CSV file, ensuring that inventory state is retained across sessions without the overhead of a database.
 
 ---
 
@@ -85,4 +78,37 @@ exception classes used across the service and UI layers.
 ---
 
 ## Git Discipline Notes
-Minimum 10 meaningful commits required.
+Development followed structured, incremental commits aligned with layered architecture implementation and iterative bug fixing.
+
+#### Layered Development
+
+- Established src/ packages: dao/, model/, service/, ui/, exceptions/.
+    
+- Implemented Product model with fields, constructor, getters/setters, toString(), display().
+    
+- Declared ProductDAO interface; implemented FileItemDAO with CSV read/write.
+    
+- Added InventoryService business logic with operations and exceptions.
+    
+- Created custom exceptions: ItemNotFoundException, InsufficientStockException, DuplicateSKUException.
+    
+- Built ConsoleMenu with main loop, cases, and try-catch handling.
+    
+
+#### Bug Fixes & Polish
+
+- Fixed Windows FileSystemException via two-phase file writes (separate Files.move()).
+    
+- Added first-run file existence checks in read methods.
+    
+- Automated ID generation: removed user ID input, implemented getNextProductID(); added readInt()/readDouble() for input validation.
+    
+- Cleanup: duplicate SKU checks, void display() correction.
+    
+
+#### Finalization
+
+- Added class diagram documentation in docs/, required report in report/ and presentation file in slides/.
+    
+
+Commit frequency: 8-9 small, focused changes over 4 days, enabling easy rollback and review. Messages used imperative mood (e.g., "Add...", "Fix...", "Debug...") with context on issues resolved.
